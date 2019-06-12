@@ -1,0 +1,7 @@
+/.editorconfig
+/node_modules
+/src
+/tsconfig.json
+/yarn.lock
+*.log
+*.tgz
