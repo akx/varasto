@@ -11,6 +11,13 @@ const argv = yargs
     '$0 [options] <directory>',
     'Start the HTTP server.',
     (yargs: yargs.Argv) => yargs
+      .option('h', {
+        alias: 'host',
+        nargs: 1,
+        default: '0.0.0.0',
+        describe: 'Hostname which to bind to.',
+        type: 'string',
+      })
       .option('p', {
         alias: 'port',
         nargs: 1,
@@ -30,7 +37,8 @@ const argv = yargs
 
 const storage = new Storage({ dir: argv.directory as string });
 const server = createServer(storage);
-const port = normalizePort(argv.port as number);
+const host = argv.host as string;
+const port = normalizePort(argv.port as number) as number;
 
 server.on('error', (err: any) => {
   const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`;
@@ -56,6 +64,6 @@ server.on('error', (err: any) => {
   }
 });
 
-server.listen(port, () => process.stdout.write(
-  `Varasto is listening on ${port}\n`
+server.listen(port, host, () => process.stdout.write(
+  `Varasto is listening on http://${host}:${port}\n`
 ));
