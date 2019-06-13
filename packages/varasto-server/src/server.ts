@@ -1,7 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 
-import Storage from './storage';
+import { Storage } from 'varasto-storage';
 
 export const createServer = (storage: Storage) => {
   const server = express();
