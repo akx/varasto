@@ -13,23 +13,23 @@ export interface StorageOptions {
   encoding: string;
 }
 
-export default class Storage {
+export class Storage {
   private readonly options: StorageOptions;
 
   public constructor(options?: Partial<StorageOptions>) {
     this.options = Object.assign(
       {
-        dir: './storage',
+        dir: './data',
         encoding: 'utf-8',
       },
       options,
     );
   }
 
-  public getItem(key: string): Promise<any> {
+  public getItem(key: string): Promise<Object|undefined> {
     const itemPath = this.getItemPath(key);
 
-    return new Promise<any>((resolve, reject) => {
+    return new Promise<Object|undefined>((resolve, reject) => {
       fs.readFile(
         itemPath,
         this.options.encoding,
@@ -46,7 +46,9 @@ export default class Storage {
           try {
             const content = JSON.parse(text);
 
-            if (content.key === key) {
+            if (content.key === key &&
+                content.value != null &&
+                typeof content.value === 'object') {
               resolve(content.value);
             } else {
               resolve(undefined);
@@ -60,11 +62,11 @@ export default class Storage {
     });
   }
 
-  public setItem(key: string, value: any): Promise<string> {
+  public setItem(key: string, value: Object): Promise<void> {
     const itemPath = this.getItemPath(key);
 
     return this.ensureDirectoryExists()
-      .then(() => new Promise<string>((resolve, reject) => {
+      .then(() => new Promise((resolve, reject) => {
         const content = { key, value };
 
         fs.writeFile(
@@ -75,7 +77,7 @@ export default class Storage {
             if (err) {
               reject(err);
             } else {
-              resolve(itemPath);
+              resolve();
             }
           },
         );
@@ -116,11 +118,11 @@ export default class Storage {
     );
   }
 
-  private ensureDirectoryExists(): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
+  private ensureDirectoryExists(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
       fs.exists(this.options.dir, (exists) => {
         if (exists) {
-          resolve(this.options.dir);
+          resolve();
           return;
         }
 
@@ -128,7 +130,7 @@ export default class Storage {
           if (err) {
             reject(err);
           } else {
-            resolve(this.options.dir);
+            resolve();
           }
         });
       });
