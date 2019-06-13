@@ -1,6 +1,6 @@
 {
   "name": "varasto",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "JSON key-value store with HTTP server interface",
   "author": "Rauli Laine <rauli.laine@iki.fi> (https://rauli.dev/)",
   "license": "MIT",
@@ -36,7 +36,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "morgan": "^1.9.1",
-    "varasto-storage": "^0.1.0",
+    "varasto-storage": "^0.2.0",
     "yargs": "^13.2.4"
   }
 }
