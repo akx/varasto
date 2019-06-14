@@ -25,13 +25,16 @@ export const createServer = (storage: Storage) => {
       }))
   ));
 
-  server.post('/:key', (req, res) => (
+  const storeItemCallback = (req: express.Request, res: express.Response) => (
     storage.setItem(req.params.key, req.body)
       .then(() => res.status(201).json(req.body))
       .catch(() => res.status(500).json({
         error: 'Unable to store item.',
       }))
-  ));
+  );
+
+  server.post('/:key', storeItemCallback);
+  server.put('/:key', storeItemCallback);
 
   server.delete('/:key', (req, res) => (
     storage.getItem(req.params.key)
