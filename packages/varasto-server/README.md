@@ -79,6 +79,48 @@ If item with identifier `foo` exists, it's value will be returned as response.
 If an item with the given identifier does not exist, HTTP error 404 will be
 returned instead.
 
+### Updating items
+
+You can also partially update an already existing item with `PATCH` request.
+The JSON sent with an `PATCH` request will be merged with the already existing
+data with [Object.assign()] and the result will be sent as response.
+
+For example, you have an item `person` with the following data:
+
+```JSON
+{
+    "name": "John Doe",
+    "address": "Some street 4",
+    "phoneNumber": "+35840123123"
+}
+```
+
+And you send an `PATCH` request like this:
+
+```http
+PATCH /person HTTP/1.0
+Content-Type: application/json
+Content-Length: 71
+
+{
+    "address": "Some other street 5",
+    "faxNumber": "+358000000"
+}
+```
+
+You end up with:
+
+```JSON
+{
+    "name": "John Doe",
+    "address": "Some other street 5",
+    "phoneNumber": "+35840123123",
+    "faxNumber": "+358000000"
+}
+```
+
+[Object.assign()]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+
 ## Notes
 
 Varasto does not currently support any kind of authentication, so you might not

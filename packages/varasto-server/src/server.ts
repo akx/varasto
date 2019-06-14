@@ -33,6 +33,29 @@ export const createServer = (storage: Storage) => {
       }))
   ));
 
+  server.patch('/:key', (req, res) => (
+    storage.getItem(req.params.key)
+      .then((value) => {
+        if (typeof value === 'undefined') {
+          res.status(404).json({
+            error: 'Item does not exist.',
+          });
+          return;
+        }
+
+        const result = Object.assign(value, req.body);
+
+        storage.setItem(req.params.key, result)
+          .then(() => res.status(201).json(result))
+          .catch(() => res.status(500).json({
+            error: 'Unable to store item.',
+          }));
+      })
+      .catch(() => res.status(500).json({
+        error: 'Unable to retrieve item.',
+      }))
+  ));
+
   server.delete('/:key', (req, res) => (
     storage.getItem(req.params.key)
       .then((value) => {
