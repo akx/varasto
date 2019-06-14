@@ -20,6 +20,9 @@ export const createServer = (storage: Storage) => {
           res.status(200).json(value);
         }
       })
+      .catch(() => res.status(500).json({
+        error: 'Unable to retrieve item.',
+      }))
   ));
 
   server.post('/:key', (req, res) => (
