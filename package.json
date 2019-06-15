@@ -1,6 +1,9 @@
 {
   "name": "varasto-core",
   "private": true,
+  "engines": {
+    "node": ">=8.0"
+  },
   "scripts": {
     "build": "lerna run build",
     "watch": "lerna run watch"
