@@ -2294,6 +2294,13 @@ utils-merge@1.0.1:
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
 
+varasto-storage@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/varasto-storage/-/varasto-storage-0.2.0.tgz#7879906251a58dbfc063f9c96cc9a7bb3778c054"
+  integrity sha512-7/0stu90WM2hfQKsV/OwFon8Jasj6vQl0xrULdZ6zmViusO62D+6LsSLlBnx03dEp/E7wpicW8YEMYua02wzwA==
+  dependencies:
+    mkdirp "^0.5.1"
+
 vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"

@@ -1,0 +1,32 @@
+{
+  "name": "varasto-client",
+  "version": "0.1.0",
+  "description": "Node.js client for Varasto key-value store",
+  "main": "./index.js",
+  "typings": "./index.d.ts",
+  "author": "Rauli Laine <rauli.laine@iki.fi> (https://rauli.dev/)",
+  "license": "MIT",
+  "homepage": "https://github.com/RauliL/varasto",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RauliL/varasto"
+  },
+  "bugs": {
+    "url": "https://github.com/RauliL/varasto/issues"
+  },
+  "engines": {
+    "node": ">=8.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "prepack": "yarn run build"
+  },
+  "devDependencies": {
+    "@types/request": "^2.48.1",
+    "typescript": "^3.5.2"
+  },
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}
