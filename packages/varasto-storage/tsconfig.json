@@ -1,9 +1,4 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
-    "declaration": true
-  }
+  "extends": "../../tsconfig.json",
+  "files": ["./index.ts"]
 }

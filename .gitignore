@@ -1,5 +1,6 @@
 /node_modules
-/packages/varasto-server/lib/*.js
+/packages/varasto-server/index.d.ts
+/packages/varasto-server/index.js
 /packages/varasto-server/node_modules
 /packages/varasto-storage/index.d.ts
 /packages/varasto-storage/index.js
