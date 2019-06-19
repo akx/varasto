@@ -1,6 +1,6 @@
 {
   "name": "varasto-client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Node.js client for Varasto key-value store",
   "main": "./index.js",
   "typings": "./index.d.ts",
