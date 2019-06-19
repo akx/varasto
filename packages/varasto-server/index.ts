@@ -1,13 +1,43 @@
+import basicAuth from 'basic-auth';
 import express from 'express';
 import morgan from 'morgan';
 
 import { Storage } from 'varasto-storage';
 
-export const createServer = (storage: Storage) => {
+export interface ServerOptions {
+  auth?: {
+    username: string;
+    password: string;
+  };
+}
+
+export const createServer = (
+  storage: Storage,
+  options: Partial<ServerOptions> = {}
+) => {
   const server = express();
 
   server.use(express.json());
   server.use(morgan('combined'));
+
+  if (options && options.auth) {
+    const { username, password } = options.auth;
+
+    server.use((req, res, next) => {
+      const credentials = basicAuth(req);
+
+      if (!credentials ||
+          credentials.name !== username ||
+          credentials.pass !== password) {
+        res.statusCode = 401;
+        res.setHeader('WWW-Authenticate', 'Basic realm="varasto"');
+        res.end('Unauthorized');
+        return;
+      }
+
+      next();
+    });
+  }
 
   server.get('/:key', (req, res) => (
     storage.getItem(req.params.key)

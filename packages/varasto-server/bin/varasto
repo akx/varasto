@@ -12,6 +12,12 @@ const argv = yargs
     'Start the HTTP server.',
     (yargs) => yargs
       .options({
+        a: {
+          alias: 'auth',
+          nargs: 1,
+          describe: 'Username and password to require, separated with ":".',
+          type: 'string'
+        },
         h: {
           alias: 'host',
           nargs: 1,
@@ -36,8 +42,20 @@ const argv = yargs
   )
   .argv;
 
+const createServerOptions = () => {
+  const options = {};
+
+  if (argv.auth) {
+    const [username, password] = argv.auth.split(':');
+
+    options.auth = { username, password };
+  }
+
+  return options;
+};
+
 const storage = new Storage({ dir: argv.directory });
-const server = createServer(storage);
+const server = createServer(storage, createServerOptions());
 const { host, port } = argv;
 
 server.on('error', (err) => {
