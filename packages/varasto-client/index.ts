@@ -1,9 +1,13 @@
-import request from 'request';
+import axios, { Method } from 'axios';
 
 export interface ClientOptions {
   hostname: string;
   port: number;
   secure: boolean;
+  auth?: {
+    username: string;
+    password: string;
+  };
 }
 
 export class Client {
@@ -18,125 +22,79 @@ export class Client {
   }
 
   public getItem(key: string): Promise<Object|undefined> {
-    return new Promise<Object|undefined>((resolve, reject) => {
-      request(
-        {
-          method: 'GET',
-          uri: this.getItemURL(key),
-          json: true,
-        },
-        (err, response, body) => {
-          if (err) {
-            reject(err);
-            return;
-          }
+    return this.request('GET', key)
+      .then((response) => {
+        if (response.status !== 200) {
+          return Promise.reject('Unable to retrieve item');
+        }
 
-          if (response.statusCode === 404) {
-            resolve(undefined);
-            return;
-          }
+        return Promise.resolve(response.data);
+      })
+      .catch((err) => {
+        if (err.response && err.response.status === 404) {
+          return Promise.resolve(undefined);
+        }
 
-          if (response.statusCode !== 200) {
-            reject(new Error('Unable to retrieve item'));
-            return;
-          }
-
-          resolve(body);
-        },
-      );
-    });
+        return Promise.reject(err);
+      });
   }
 
   public setItem(key: string, value: Object): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      request(
-        {
-          method: 'POST',
-          uri: this.getItemURL(key),
-          body: value,
-          json: true,
-        },
-        (err, response) => {
-          if (err) {
-            reject(err);
-            return;
-          }
+    return this.request('POST', key, value)
+      .then((response) => {
+        if (response.status !== 201) {
+          return Promise.reject(new Error('Unable to store item'));
+        }
 
-          if (response.statusCode !== 201) {
-            reject(new Error('Unable to store item'));
-            return;
-          }
-
-          resolve();
-        },
-      );
-    });
+        return Promise.resolve(undefined);
+      });
   }
 
   public removeItem(key: string): Promise<Object|undefined> {
-    return new Promise<Object|undefined>((resolve, reject) => {
-      request(
-        {
-          method: 'DELETE',
-          uri: this.getItemURL(key),
-          json: true,
-        },
-        (err, response, body) => {
-          if (err) {
-            reject(err);
-            return;
-          }
+    return this.request('DELETE', key)
+      .then((response) => {
+        if (response.status !== 201) {
+          return Promise.reject(new Error('Unable to remove item'));
+        }
 
-          if (response.statusCode === 404) {
-            resolve();
-            return;
-          }
+        return Promise.resolve(response.data);
+      })
+      .catch((err) => {
+        if (err.response && err.response.status === 404) {
+          return Promise.resolve(undefined);
+        }
 
-          if (response.statusCode !== 201) {
-            reject(new Error('Unable to remove item'));
-            return;
-          }
-
-          resolve(body);
-        },
-      );
-    });
+        return Promise.reject(err);
+      });
   }
 
   public patchItem(key: string, value: Object): Promise<Object|undefined> {
-    return new Promise<Object|undefined>((resolve, reject) => {
-      request(
-        {
-          method: 'PATCH',
-          uri: this.getItemURL(key),
-          body: value,
-          json: true,
-        },
-        (err, response, body) => {
-          if (err) {
-            reject(err);
-            return;
-          }
+    return this.request('PATCH', key, value)
+      .then((response) => {
+        if (response.status !== 201) {
+          return Promise.reject(new Error('Unable to update item'));
+        }
 
-          if (response.statusCode === 404) {
-            resolve(undefined);
-            return;
-          }
+        return Promise.resolve(response.data);
+      })
+      .catch((err) => {
+        if (err.response && err.response.status === 404) {
+          return Promise.resolve(undefined);
+        }
 
-          if (response.statusCode !== 201) {
-            reject(new Error('Unable to update item'));
-            return;
-          }
-
-          resolve(body);
-        },
-      );
-    });
+        return Promise.reject(err);
+      });
   }
 
-  private getItemURL(key: string): string {
+  private request(method: Method, key: string, data?: any) {
     const { hostname, port, secure } = this.options;
+    const url = `http${secure ? 's' : ''}://${hostname}:${port}/${key}`;
 
-    return `http${secure ? 's' : ''}://${hostname}:${port}/${key}`;
+    return axios({
+      auth: this.options.auth,
+      data,
+      method,
+      url,
+    });
   }
 }

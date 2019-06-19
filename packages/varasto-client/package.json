@@ -23,10 +23,9 @@
     "prepack": "yarn run build"
   },
   "devDependencies": {
-    "@types/request": "^2.48.1",
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "request": "^2.88.0"
+    "axios": "^0.19.0"
   }
 }

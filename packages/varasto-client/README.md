@@ -1,6 +1,9 @@
 # varasto-client
 
-Node.js client library for Varasto JSON key-value store.
+Node.js client library for Varasto JSON key-value store. Uses [axios] for
+connecting to the server.
+
+[axios]: https://github.com/axios/axios
 
 ## Installation
 
@@ -19,6 +22,7 @@ Property   | Default value | Description
 `hostname` | `0.0.0.0`     | Hostname of the server to which to connect to.
 `port`     | `3000`        | Port of the server to which to connect to.
 `secure`   | `false`       | Whether HTTPS should be used or not.
+`auth`     |               | Username and password for basic authentication.
 
 ### Storing items
 
